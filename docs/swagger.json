@@ -1,510 +1,908 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "Simple User Post",
-    "description": "Aplikasi Untuk Posting",
-    "termsOfService": "http://didi.com/terms/",
-    "contact": {
-      "name": "API Support",
-      "url": "http://www.didi.com/support",
-      "email": "support@example.com"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "1.0.1"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:5000",
-      "description": "Development Server"
-    },
-    {
-      "url": "http://production.com",
-      "description": "Production Server"
-    }
-  ],
-  "tags": [
-    {
-      "name": "Users",
-      "description": "End Point Untuk Operasi CRUD Users"
-    },
-    {
-      "name": "Posts",
-      "description": "End Point Untuk Operasi CRUD Posts"
-    }
-  ],
-  "paths": {
-    "/users": {
-      "post": {
-        "tags": ["Users"],
-        "summary": "Create A new User",
-        "operationId": "createUser",
-        "requestBody": {
-          "description": "Buat User Baru",
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Create_User_Body"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Create_User_Body"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "sucessful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "error operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": ["Users"],
-        "summary": "Get All Users",
-        "operationId": "getAllUsers",
-        "description": "Get All Users From Database",
-        "responses": {
-          "200": {
-            "description": "Successfully get Users",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully get user data"
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/User"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User Data Is Empty",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User Data Is Empty"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Some Error Message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{uuid}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "Get Users By UUID",
-        "operationId": "getUserByID",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "Unique UUID of User",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "a2ee6c50-2fbb-4610-b2f5-6a9456725f23"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully get Users",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully get user data"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/User_Post"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User Data Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User Data Not Found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Some Error Message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": ["Users"],
-        "summary": "Edit Users By UUID",
-        "operationId": "editUserByID",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "Unique UUID of User",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "a2ee6c50-2fbb-4610-b2f5-6a9456725f23"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Update Existing User Data",
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Update_User_Body"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Update_User_Body"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully Update Users",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User Successfully Updated"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User Data Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User Data Not Found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Some Error Message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Users"],
-        "summary": "Delete Users By UUID",
-        "operationId": "deleteUserByID",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "Unique UUID of User",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "33f570e1-8961-417b-bf17-be1c11dc4bb1"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully delete User",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "SUCCESS"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User Data Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User Data Not Found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Some Error Message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Create_User_Body": {
-        "required": ["name", "email", "role"],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Ninda"
-          },
-          "email": {
-            "type": "string",
-            "example": "ninda@email.com"
-          },
-          "role": {
-            "type": "string",
-            "example": "editor"
-          }
-        }
-      },
-      "Update_User_Body": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Ninda"
-          },
-          "email": {
-            "type": "string",
-            "example": "ninda@email.com"
-          },
-          "role": {
-            "type": "string",
-            "example": "editor"
-          }
-        }
-      },
-      "User": {
-        "required": ["name", "email", "role"],
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      },
-      "User_Post": {
-        "required": ["name", "email", "role"],
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "post": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Post"
-            }
-          }
-        }
-      },
-      "Post": {
-        "required": ["title", "comment", "user_uuid"],
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "example": "33f570e1-8961-417b-bf17-be1c11dc4bb1"
-          },
-          "title": {
-            "type": "string",
-            "example": "Some Title"
-          },
-          "content": {
-            "type": "string",
-            "example": "Some Content"
-          },
-          "user_uuid": {
-            "type": "string",
-            "example": "33f570e1-8961-417b-bf17-be1c11dc4bb1"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      }
-    }
-  }
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Simple User Post",
+		"description": "Aplikasi untuk posting",
+		"termsOfService": "http://jnds.com/terms",
+		"contact": {
+			"name": "API Support",
+			"url": "http://jnds.com/support",
+			"email": "support@jnds.com"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+		},
+		"version": "1.0.1"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:4500",
+			"description": "Development Server"
+		},
+		{
+			"url": "http://production.com",
+			"description": "Production Server"
+		}
+	],
+	"tags": [
+		{
+			"name": "Users",
+			"description": "Endpoint untuk operasi CRUD Users"
+		},
+		{
+			"name": "Posts",
+			"description": "Endpoint untuk operasi CRUD Posts"
+		}
+	],
+	"paths": {
+		"/users": {
+			"post": {
+				"tags": ["Users"],
+				"summary": "Create a New User",
+				"operationId": "createUser",
+				"requestBody": {
+					"description": "Buat user baru",
+					"content": {
+						"application/x-www-form-urlencoded": {
+							"schema": {
+								"$ref": "#/components/schemas/Create_User_Body"
+							}
+						},
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Create_User_Body"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Successfull Operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"data": {
+											"$ref": "#/components/schemas/User"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "error operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get All Users",
+				"operationId": "getAllUsers",
+				"responses": {
+					"200": {
+						"description": "Successfully Get Users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Successfully Get User Data"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/User"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User Data is Empty",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "User Data is Empty"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{uuid}": {
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get User by UUID",
+				"operationId": "getUserByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Users",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "5fb5ce17-42a7-4d2d-93ff-12c49b90f36a"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully Get Users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Successfully Get User Data"
+										},
+										"data": {
+											"$ref": "#/components/schemas/User_Post"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "User Data Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Users"],
+				"summary": "Edit User by UUID",
+				"operationId": "editUserByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Users",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "5fb5ce17-42a7-4d2d-93ff-12c49b90f36a"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Update Existing User Data",
+					"content": {
+						"application/x-www-form-urlencoded": {
+							"schema": {
+								"$ref": "#/components/schemas/Update_User_Body"
+							}
+						},
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Update_User_Body"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successfully Update User",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "User Successfully Updated"
+										},
+										"data": {
+											"$ref": "#/components/schemas/User"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "User Data Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Users"],
+				"summary": "Delete User by UUID",
+				"operationId": "deleteUserByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Users",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "3a57c382-f2c2-4f7b-85a1-ae25bddf3c31"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully Delete User",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "SUCCESS"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "User Data Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/post": {
+			"post": {
+				"tags": ["Posts"],
+				"summary": "Create a New Post",
+				"operationId": "createPost",
+				"requestBody": {
+					"description": "Create New Post",
+					"content": {
+						"application/x-www-form-urlencoded": {
+							"schema": {
+								"$ref": "#/components/schemas/Create_Post_Body"
+							}
+						},
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Create_Post_Body"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Successfull Operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Successfully Created"
+										},
+										"data": {
+											"$ref": "#/components/schemas/Post"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["Posts"],
+				"summary": "Get All Posts Per Page",
+				"operationId": "getAllPostsPerPage",
+				"parameters": [
+					{
+						"name": "page",
+						"in": "query",
+						"description": "Which page is user right now and only showing maximum 6 data",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"example": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully Get Posts",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Posts Successfully Found"
+										},
+										"data": {
+											"type": "array",
+											"items": {
+												"$ref": "#/components/schemas/Post"
+											}
+										},
+										"currentPage": {
+											"type": "integer",
+											"example": 1
+										},
+										"totalPage": {
+											"type": "integer",
+											"example": 2
+										},
+										"nextPage": {
+											"type": "integer",
+											"example": 2
+										},
+										"prevPage": {
+											"type": "integer",
+											"example": 1
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Failed to Find Posts",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Posts Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/post/{uuid}": {
+			"get": {
+				"tags": ["Posts"],
+				"summary": "Get Post by UUID",
+				"operationId": "getPostByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Posts",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "57aa7e42-b404-45db-a32a-44cadcfd6bb0"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully Get Post",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Successfully Get Post"
+										},
+										"data": {
+											"$ref": "#/components/schemas/Post"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Post Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Posts"],
+				"summary": "Edit Post by UUID",
+				"operationId": "editPostByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Posts",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "57aa7e42-b404-45db-a32a-44cadcfd6bb0"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Update Existing Post Data",
+					"content": {
+						"application/x-www-form-urlencoded": {
+							"schema": {
+								"$ref": "#/components/schemas/Update_Post_Body"
+							}
+						},
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Update_Post_Body"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successfully Update User",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Successfully Updated"
+										},
+										"data": {
+											"$ref": "#/components/schemas/Post"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Post Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Posts"],
+				"summary": "Delete Post by UUID",
+				"operationId": "deletePostByUUID",
+				"parameters": [
+					{
+						"name": "uuid",
+						"in": "path",
+						"description": "Unique UUID of Posts",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "781cafcd-454b-4948-be0e-5eb0b9896ed6"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully Delete Post",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Successfully Deleted"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Post Data Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Post Not Found"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Some Error Message"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Create_User_Body": {
+				"required": ["name", "email", "role"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "Katarina"
+					},
+					"email": {
+						"type": "string",
+						"example": "katarina@email.com"
+					},
+					"role": {
+						"type": "string",
+						"example": "editor"
+					}
+				}
+			},
+			"Update_User_Body": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "Katarina"
+					},
+					"email": {
+						"type": "string",
+						"example": "katarina@email.com"
+					},
+					"role": {
+						"type": "string",
+						"example": "editor"
+					}
+				}
+			},
+			"User": {
+				"required": ["name", "email", "role"],
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date"
+					}
+				}
+			},
+			"User_Post": {
+				"required": ["name", "email", "role"],
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date"
+					},
+					"post": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Post"
+						}
+					}
+				}
+			},
+			"Create_Post_Body": {
+				"required": ["title", "content", "user_uuid"],
+				"type": "object",
+				"properties": {
+					"title": {
+						"type": "string",
+						"example": "Merakit PC"
+					},
+					"content": {
+						"type": "string",
+						"example": "Beli mobo, prosesor, vga, ram, ssd"
+					},
+					"user_uuid": {
+						"type": "string",
+						"example": "5fb5ce17-42a7-4d2d-93ff-12c49b90f36a"
+					}
+				}
+			},
+			"Update_Post_Body": {
+				"type": "object",
+				"properties": {
+					"title": {
+						"type": "string",
+						"example": "Merakit PC Tanpa VGA"
+					},
+					"content": {
+						"type": "string",
+						"example": "Beli mobo, prosesor dengan igp, ram, ssd"
+					}
+				}
+			},
+			"Post": {
+				"required": ["title", "content", "user_uuid"],
+				"type": "object",
+				"properties": {
+					"uuid": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"user_uuid": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date"
+					}
+				}
+			}
+		}
+	}
 }
